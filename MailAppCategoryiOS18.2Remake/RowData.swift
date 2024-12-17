@@ -14,17 +14,30 @@ struct RowData: Identifiable, Equatable {
   let category: Category
   let displayImageTitle = "person.circle.fill"
   let id = UUID()
+  private let _timestamp: Date
+  let timestamp: String
   
-  var timestamp: String {
-    Self.dateFormatter.string(from: _timestamp)
+  init(text: String, subject: String, merchant: String, category: Category) {
+    self.text = text
+    self.subject = subject
+    self.merchant = merchant
+    self.category = category
+    
+    _timestamp = Date().addingTimeInterval(TimeInterval.random(in: -1000000...0))
+    
+    if Calendar.current.isDateInToday(_timestamp) {
+      Self.dateFormatter.dateStyle = .none
+      Self.dateFormatter.timeStyle = .short
+    } else {
+      Self.dateFormatter.dateStyle = .short
+      Self.dateFormatter.timeStyle = .none
+    }
+    timestamp = Self.dateFormatter.string(from: _timestamp)
   }
-  private let _timestamp: Date = Date().addingTimeInterval(TimeInterval.random(in: -10000...0))
   
   private static let dateFormatter: DateFormatter = {
     let formatter = DateFormatter()
-    
-//    formatter.dateStyle = .short
-    formatter.timeStyle = .short
+
     formatter.doesRelativeDateFormatting = true
     
     return formatter
@@ -165,5 +178,5 @@ extension RowData {
         merchant: "Old Navy",
         category: .promotions
     )
-  ]
+  ].sorted { $0._timestamp > $1._timestamp }
 }
