@@ -8,17 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+  @State private var selectedCategory: Category?
+  private let rowData = RowData.mockData
+  
+  var body: some View {
+    ScrollView {
+      Group {
+        CategorySelector(selectedCategory: $selectedCategory)
+        
+        Spacer(minLength: 24)
+        
+        RowDataListView(rowData: rowData, selectedCaegory: $selectedCategory)
+      }
+      .padding(.horizontal, 16)
     }
+    .animation(.smooth, value: selectedCategory)
+  }
 }
 
 #Preview {
-    ContentView()
+  ContentView()
 }
