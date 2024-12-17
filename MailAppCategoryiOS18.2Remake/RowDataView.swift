@@ -44,7 +44,6 @@ public struct RowDataView: View {
       .fontDesign(.rounded)
       .truncationMode(.tail)
     }
-    .padding(.vertical, 8)
   }
 }
 
